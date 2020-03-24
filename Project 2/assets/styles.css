@@ -1,0 +1,11 @@
+/* styles.css: some simple custom decorations for the webpage */
+/* Authors:  Kevin Peralta, Jason Jose
+Contact: kevinaperalta@csu.fullerton.edu OR jasonsisonjose@csu.fullerton.edu */
+
+body {
+  text-align: center;
+  font-family: sans-serif;
+}
+canvas {
+  background-color: black;
+}
