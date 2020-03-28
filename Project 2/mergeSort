@@ -1,3 +1,15 @@
+class mergeObj
+{
+  constructor(p, ar, mid, left, right)
+  {
+    this.p = p;
+    this.ar = ar;
+    this.mid = mid;
+    this.left = left;
+    this.right = right;
+  }
+};
+
 function mergeSort (input)
 {
 //seg #1
