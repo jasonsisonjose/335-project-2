@@ -194,6 +194,9 @@ function getQuickSortStepHelper (string) {
   callerStack.push(tempData);
 }
 
+
+// TESTING CODE AREA
+
 let callerStack = [];
 let sortingStack = [];
 let counter = 0;
