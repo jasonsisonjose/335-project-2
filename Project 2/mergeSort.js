@@ -80,6 +80,7 @@ function mergeStep(mergeObj)
   }
 }
 
+
 function merge(left, right)
 {
   var result = [],
