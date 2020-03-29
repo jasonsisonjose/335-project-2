@@ -150,12 +150,17 @@ function race_manager(testingArray) {
   // Merge Sort Helper
   mergeHelp(testingArray);
   let mergeSorted = mergeSort(mergeStack)[0]
+  // Pore Sort Helper
+  let poreObj = {input:{}, swapped:true, n:0};
+  poreObj.input=testingArray
+  let testingObj = poreSortStep(poreObj);
+  console.log("testing", testingObj)
 
   let delayIndex = 0
   // Keep on looping until Quick Sort AND Merge Sort AND Pore Sort say their done
   console.log("status:",quickSortStep() != 0 || mergeSorted['p'] != 1)
 
-  while (quickSortStep() != 0 || mergeSorted['p'] != 1 /*||  poreSort != 0*/) {
+  while (quickSortStep() != 0 || mergeSorted['p'] != 1 || testingObj['swapped'] != false) {
 
     //Merge Sort
     if (mergeSort(mergeStack)[0]['p'] == 0) {
@@ -176,18 +181,20 @@ function race_manager(testingArray) {
     }
 
     // Pore Sort
+    if(testingObj['swapped'] != false) {
+      setTimeout(() => {
+        updatePoreSort(testingObj['input']);
+      },2000 * delayIndex)
+    }
 
+    updatePoreSort(testingObj['input']);
 
     delayIndex +=1;
   }
 
   // Pore Sort
-  let poreObj = {input:{}, swapped:true, n:0};
-  poreObj.input=testingArray
-  // psSetup(testingArray)
-  let testingObj = poreSortStep(poreObj);
-  console.log("testing obj:",testingObj);
-  // updatePoreSort(testingObj['input']);
+
+
   // let test2 = poreSortStep(testingObj);
   // updatePoreSort(test2['input']);
 }

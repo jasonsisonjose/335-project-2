@@ -3,6 +3,33 @@
 // Contact: kevinaperalta@csu.fullerton.edu OR jasonsisonjose@csu.fullerton.edu
 var poreObj = {input:{}, swapped:true, n:0};
 
+// Converts strings to Arrays
+function convertToArray(string) {
+  let numberArray = [];
+  for (let i = 0; i < string.length; i++) {
+    // If it's a letter, push it
+    if (isNaN(Number(string[i]))) { numberArray.push(string[i]) }
+    else { numberArray.push(Number(string[i])) }
+  }
+  return numberArray;
+}
+
+
+
+// This is necessary to compare letters to numbers
+// ex: 'A' > 5
+function numberCheck(testElement) {
+  // Test Element is not a number, a letter
+  // Return the number associated with letter
+  if (isNaN(Number(testElement))) {
+    return letters[testElement];
+  }
+  else {
+    // It is a number, continue on.
+      return Number(testElement);
+  }
+}
+
 function psSetup(array) {
   poreObj.input = array;
 }
@@ -16,6 +43,7 @@ function swap (items, left, right)
 
 function poreSortStep(pObj)
 {
+  // pObj.input = convertToArray(pObj.input)
   if(pObj.swapped)
   {
     pObj.swapped = false;
@@ -34,15 +62,19 @@ function poreSortStep(pObj)
     psSetup(pObj.input);
     pObj.n++;
   }
+  pObj.input = pObj.input.join('')
   return pObj;
 }
 
-poreObj.input = [3,1,4,5,2];
-poreSortStep(poreObj);
+let pObj = {input:{}, swapped:true, n:0};
+pObj.input = [3,1,4,5,2];
+let testingObj = poreSortStep(pObj);
+console.log("testing obj:",testingObj);
+
+console.log(testingObj['input'])
 
 
-// psSetup([3,1,4,5,2]);
 // while(poreObj.swapped) {
 //   let test = poreSortStep(poreObj);
-//   console.log(poreObj.input);
+//   console.log(test.input);
 // }

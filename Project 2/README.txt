@@ -1,4 +1,9 @@
-Tntro
+This file explains the files inside of this.
+
+Authors: Kevin Peralta, Jason Jose
+Contact: kevinaperalta@csu.fullerton.edu OR jasonsisonjose@csu.fullerton.edu
+
+Intro
 
   This project is an example of implementing different sorting functions and putting them to the test in a race. The quicker sort finishes first!
   Each line represents a new pass in the sorting algorithm. Place your bets! Let's see who will win!
@@ -42,6 +47,6 @@ Installation & Running
 Known Bugs
 
   o- Merge Sort doesn't display steps, just the final outcome
-  o- Quick Sort switches duplicate positions, resulting in additonal passes
+  o- Pore Sort Step doesn't display steps in the main cs-sketch.js file, but it does in the poreSortStep.js file
 
 Testing
