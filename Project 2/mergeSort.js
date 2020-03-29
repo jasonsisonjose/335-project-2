@@ -1,3 +1,7 @@
+// mergeSort.js --> has the implementation to doing merge Sorting
+// Authors: Kevin Paralta, Jason Jose
+// Contact: kevinaperalta@csu.fullerton.edu OR jasonsisonjose@csu.fullerton.edu
+
 class mergeObj
 {
   constructor(p, ar, mid, left, right)
@@ -10,10 +14,11 @@ class mergeObj
   }
 };
 
+let mergeStack=[]
+
 function mergeSort (input)
 {
 //seg #1
-console.log(input);
   var larr,rarr;
   if (input.length < 2)
     return input;

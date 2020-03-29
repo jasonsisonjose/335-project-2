@@ -4,7 +4,7 @@
 
 let quickSortBag = {
   'stack' : [],
-  'currentIndex': 0,
+  'currentIndex': 1,
   'low' : 0,
   'high': 0,
 }

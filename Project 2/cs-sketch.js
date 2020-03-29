@@ -42,9 +42,9 @@ let testingInput = [
 
 
 // Quick Sort Data Requirements
-let quickSortRow = 2;
-let mergeSortRow = 2;
-let poreSortRow = 2;
+let quickSortRow = 3;
+let mergeSortRow = 3;
+let poreSortRow = 3;
 
 // DONE: Setup should create 3 columns, where each column represents each sorting Algorithm
 // DONE: each column is 12 cells wide and 40+ rows high
@@ -84,9 +84,8 @@ function draw_structure () {
 function updateQuickSort(array) {
   let y_position = g_canvas.cell_size * quickSortRow;
   let x_position = 0;
-  console.log(array)
+
   for(let arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
-    console.log(array[arrayIndex])
     stroke('orange')
     fill('white')
     rect(x_position, y_position, g_canvas.cell_size,g_canvas.cell_size)
@@ -101,12 +100,13 @@ function updateQuickSort(array) {
 // Update Merge sort function, adds the new array from the merge sort pass
 function updateMergeSort (array) {
   let y_position = g_canvas.cell_size * mergeSortRow;
-  let x_position = 0;
-  console.log(array)
+  let x_position = g_canvas.cell_size * 13;
+  // console.log("length:",array.length)
   for(let arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
-    console.log(array[arrayIndex])
+    // console.log(array[arrayIndex])
     stroke('orange')
     fill('white')
+
     rect(x_position, y_position, g_canvas.cell_size,g_canvas.cell_size)
 
     noStroke();
@@ -114,15 +114,14 @@ function updateMergeSort (array) {
     text(`${array[arrayIndex]}`, x_position + 5, y_position + 17)
     x_position += g_canvas.cell_size;
   }
-  quickSortRow += 1;
+  mergeSortRow += 1;
 }
 // Update pore sort function, adds the new array from the merge sort pass
 function updatePoreSort (array) {
   let y_position = g_canvas.cell_size * poreSortRow;
-  let x_position = 0;
-  console.log(array)
+  let x_position = g_canvas.cell_size * 26;
   for(let arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
-    console.log(array[arrayIndex])
+
     stroke('orange')
     fill('white')
     rect(x_position, y_position, g_canvas.cell_size,g_canvas.cell_size)
@@ -132,35 +131,72 @@ function updatePoreSort (array) {
     text(`${array[arrayIndex]}`, x_position + 5, y_position + 17)
     x_position += g_canvas.cell_size;
   }
-  quickSortRow += 1;
+  poreSortRow += 1;
 }
 
 
 // Does one step at a time for each algorithm until they are all done.
 function race_manager(testingArray) {
-  // QuickSort
+
+  // Do the initial row
+  updateQuickSort(testingArray)
+  updatePoreSort(testingArray)
+  updateMergeSort(testingArray)
+
+  // Helper Functions (if needed)
+
+  // Quick Sort helper
   quickSortHelper(testingArray);
+  // Merge Sort Helper
+  mergeHelp(testingArray);
+  let mergeSorted = mergeSort(mergeStack)[0]
+
   let delayIndex = 0
-  while (quickSortStep() != 0) {
-    let step = quickSortStep();
-    setTimeout(() => {
-      updateQuickSort(step);
-    },2000 * delayIndex)
-    delayIndex += 1;
-    quickSortBag['currentIndex'] += 1;
+  // Keep on looping until Quick Sort AND Merge Sort AND Pore Sort say their done
+  console.log("status:",quickSortStep() != 0 || mergeSorted['p'] != 1)
+
+  while (quickSortStep() != 0 || mergeSorted['p'] != 1 /*||  poreSort != 0*/) {
+
+    //Merge Sort
+    if (mergeSort(mergeStack)[0]['p'] == 0) {
+      setTimeout(() => {
+        updateMergeSort(mergeSorted['ar'])
+      },2000 * delayIndex);
+      mergeSorted['p'] = 1;
+      console.log("should be 1: ",mergeSorted['p'])
+    }
+
+    //Quick Sort
+    if (quickSortStep() != 0) {
+      let step = quickSortStep();
+      setTimeout(() => {
+        updateQuickSort(step);
+      },2000 * delayIndex)
+      quickSortBag['currentIndex'] += 1;
+    }
+
+    // Pore Sort
+
+
+    delayIndex +=1;
   }
 
   // Pore Sort
   let poreObj = {input:{}, swapped:true, n:0};
-  poreObj.input = testingArray;
-  console.log(poreSortStep(poreObj));
-
+  poreObj.input=testingArray
+  // psSetup(testingArray)
+  let testingObj = poreSortStep(poreObj);
+  console.log("testing obj:",testingObj);
+  // updatePoreSort(testingObj['input']);
+  // let test2 = poreSortStep(testingObj);
+  // updatePoreSort(test2['input']);
 }
 
 function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
 {
   noLoop();
-  let testIndex = Math.floor((Math.random() * 24))
+  // let testIndex = Math.floor((Math.random() * 24))
+  let testIndex =0;
   race_manager(testingInput[testIndex])
     // draw_update();
 }
