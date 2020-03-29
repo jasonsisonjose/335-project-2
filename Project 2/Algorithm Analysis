@@ -1,0 +1,6 @@
+  For MergeSort the running time we have multiple calls to helper functions and then two recursive calls that divide the input array
+in half. The helper functions called inside the mergesort can be considered null since most of the time being consumed is from the
+recursive calls that get called a maximum of the number of elements inside the array divided by two. This gives a bigO of O(nlog(n)).
+
+  Poresort’s running time creates some helper variables and goes into a two loops: the first a while loop and the second a for loop.
+With this the while and for loop can iterate a total of n times. This gives Poresort a bigO of O(n2).
