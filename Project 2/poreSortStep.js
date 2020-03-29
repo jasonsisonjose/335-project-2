@@ -33,6 +33,7 @@ function poreSortStep(pObj)
       }
       console.log(pObj.input)
     }
+    psSetup(pObj.input);
     pObj.n++;
   }
   console.log(pObj.input);
