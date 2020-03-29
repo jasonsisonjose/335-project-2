@@ -1,123 +1,166 @@
-// cs-sketch.js; P5 key animation functions, uses rule 150 to determine whether a box should be filled white or not
+// cs-sketch.js; P5 key animation functions, uses merge sort, quick sort, and pore sort and displays them to see which algorithm can finish them the quickest.
 // Authors: Kevin Paralta, Jason Jose
 // Contact: kevinaperalta@csu.fullerton.edu OR jasonsisonjose@csu.fullerton.edu
 
 // Make global g_canvas JS 'object': a key-value 'dictionary'.
-var g_canvas = { cell_size:10, wid:70, hgt:100 }; // JS Global var, w canvas size info.
+var g_canvas = { cell_size:20, wid:38, hgt:100 }; // JS Global var, w canvas size info.
 var g_frame_cnt = 0; // Setup a P5 display-frame counter, to do anim
 var g_frame_mod = 24; // Update ever 'mod' frames.
 var g_stop = 0; // Go by default.
 
-// TODO: Setup should create 3 columns, where each column represents each sorting Algorithm
-// TODO: each colum is 12 cells wide and 40+ rows high
-// TODO: Each cell is 20x20 pixels wide at least
+let firstColumn = g_canvas.cell_size * 12;
+let secondColumn = g_canvas.cell_size * 25;
+
+// Define Required Testing Input as an array holding arrays
+let testingInput = [
+  [0, 5, 'A', 6, 2, 7, 'B', 2, 'B', 6, 0, 3],
+  [0, 6, 5, 6, 6, 7, 1, 0, 4, 0, 'B', 'A'],
+  [0, 6, 5, 6, 6, 7, 1, 0, 4, 0, 'B', 'A'],
+  [0, 7, 9, 'A', 2, 1, 8, 3, 4, 'B', 6, 5],
+  [0, 9, 4, 8, 7, 8, 6, 2, 2, 6, 1, 6],
+  [1, 'A', 'B', 3, 4, 7, 9, 0, 5, 2, 8, 6],
+  [2, 8, 6, 1, 0, 3, 4, 2, 7, 8, 5, 9],
+  [3, 0, 5, 3, 0, 4, 7, 8, 6, 'A', 2, 1],
+  [3, 2, 8, 4, 7, 6, 5, 1, 0, 'B', 'A', 9],
+  [3, 4, 2, 7, 5, 6, 1, 8, 9, 0, 'B', 'A'],
+  [4, 1, 'B', 3, 8, 2, 6, 2, 1, 9, 8, 5],
+  [4, 6, 3, 7, 9, 0, 1, 5, 'B', 8, 'A', 2],
+  [5, 3, 5, 1, 'A', 3, 3, 'A', 9, 9, 'B', 'B'],
+  [5, 9, 3, 4, 7, 9, 0, 8, 8, 'A', 1, 5],
+  [5, 9, 'A', 2, 2, 'A', 4, 4, 'A', 3, 9, 4],
+  [7, 1, 9, 2, 0, 6, 8, 'B', 3, 4, 5, 'A'],
+  [7, 2, 'B', 3, 'A', 5, 4, 1, 6, 9, 8, 0],
+  [8, 1, 'A', 3, 9, 2, 0, 1, 0, 'A', 9, 1],
+  [8, 9, 4, 0, 'A', 5, 2, 'B', 1, 6, 3, 7],
+  ['A', 6, 9, 3, 5, 4, 2, 'B', 7, 0, 1, 8],
+  ['A', 9, 4, 2, 5, 'B', 1, 6, 8, 7, 3, 0],
+  ['A', 'A', 0, 2, 3, 'B', 7, 2, 3, 5, 6, 4],
+  ['B', 4, 0, 1, 6, 3, 8, 'A', 2, 9, 7, 5],
+  ['B', 5, 8, 6, 1, 7, 9, 2, 'A', 4, 0, 3]
+]
+
+
+
+// Quick Sort Data Requirements
+let quickSortRow = 2;
+let mergeSortRow = 2;
+let poreSortRow = 2;
+
+// DONE: Setup should create 3 columns, where each column represents each sorting Algorithm
+// DONE: each column is 12 cells wide and 40+ rows high
+// DONE: Each cell is 20x20 pixels wide at least
 function setup() // P5 Setup Fcn
 {
     frameRate(1000);
     let sz = g_canvas.cell_size;
     let width = sz * g_canvas.wid;  // Our 'canvas' uses cells of given size, not 1x1 pixels.
     let height = sz * g_canvas.hgt;
-    createCanvas( width, height );  // Make a P5 canvas.
-    draw_grid( 10, 50, 'black', 'white' );
-    initial_row();
+    createCanvas(width, height);  // Make a P5 canvas.
+    draw_structure();
+}
+// Responsible for creating the columns and labeling them
+function draw_structure () {
+  fill('black');
+  // Creating the columns
+  rect(firstColumn, 0, g_canvas.cell_size, height)
+  rect(secondColumn, 0, g_canvas.cell_size, height)
+
+  // Labeling the 3 columns
+  noStroke()
+  textSize(20)
+  text('Quick Sort', 80, 20)
+
+  noStroke()
+  textSize(20)
+  text('Merge Sort', 340, 20)
+
+  noStroke()
+  textSize(20)
+  text('Pore Sort', 600, 20)
+
 }
 
-var g_bot = { x:0, y:1, color:100 }; // Dir is 0..7 clock, w 0 up.
-var g_box = { t:1, hgt:g_canvas.hgt + 1, l:1, wid:g_canvas.wid + 1}; // Box in which bot can move.
+// Update Quick sort function, adds the new array from the quick sort pass
+function updateQuickSort(array) {
+  let y_position = g_canvas.cell_size * quickSortRow;
+  let x_position = 0;
+  console.log(array)
+  for(let arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
+    console.log(array[arrayIndex])
+    stroke('orange')
+    fill('white')
+    rect(x_position, y_position, g_canvas.cell_size,g_canvas.cell_size)
 
-// TODO: Set the first row to have the same input for each column
-function initial_row()
-{
-  stroke('white');
-  fill('white');
-  let sz = g_canvas.cell_size;
-  let half = Math.floor(g_canvas.wid / 2);
-  for(var x = 0; x < g_canvas.wid; x++)
-  {
-    if(x == half)
-      rect(half*sz, 0, sz, sz);
+    noStroke();
+    fill('black')
+    text(`${array[arrayIndex]}`, x_position + 5, y_position + 17)
+    x_position += g_canvas.cell_size;
   }
+  quickSortRow += 1;
 }
-// Input is going to be a 12-character hexadecimal string
-// testing case
-let input = "FD8A15934785"
+// Update Merge sort function, adds the new array from the merge sort pass
+function updateMergeSort (array) {
+  let y_position = g_canvas.cell_size * mergeSortRow;
+  let x_position = 0;
+  console.log(array)
+  for(let arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
+    console.log(array[arrayIndex])
+    stroke('orange')
+    fill('white')
+    rect(x_position, y_position, g_canvas.cell_size,g_canvas.cell_size)
 
-// TODO: Sorting Algorithms Implementation
-// Each of these sorting Algorithms should do one-pass at a time
-
-// TODO: Gold Pore's Sort
-// TODO: Make sure algorithm works then work on displaying it via html
-function poreSort (input) {
-
-}
-
-// TODO: Merge Sorting
-// TODO: Make sure algorithm works then work on displaying it via html
-function mergeSort (input) {
-
-}
-
-// TODO: Quicksort
-// TODO: Make sure algorithm works then work on displaying it via html
-function quickSort (input) {
-  // Set the first element to be the pivot
-  pivotIndex = 0;
-  storeIndex = pivotIndex + 1;
-  for (int i = pivotIndex; i < input.length(); i++) {
-
+    noStroke();
+    fill('black')
+    text(`${array[arrayIndex]}`, x_position + 5, y_position + 17)
+    x_position += g_canvas.cell_size;
   }
+  quickSortRow += 1;
 }
+// Update pore sort function, adds the new array from the merge sort pass
+function updatePoreSort (array) {
+  let y_position = g_canvas.cell_size * poreSortRow;
+  let x_position = 0;
+  console.log(array)
+  for(let arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
+    console.log(array[arrayIndex])
+    stroke('orange')
+    fill('white')
+    rect(x_position, y_position, g_canvas.cell_size,g_canvas.cell_size)
 
-// TODO: Start Race is moving each sorting algorithm one pass at a time
-function startRace(input) {
-  quickSort(input);
-  poreSort(input);
-  mergeSort(input);
-}
-
-
-
-
-// moves the bot one box to the right
-function move_bot()
-{
-    let dx = 1;
-
-    let x = (dx + g_bot.x + g_box.wid) % g_box.wid; // Move-x.  Ensure positive b4 mod.
-    let color =  0; // Incr color in nice range.
-    g_bot.x = x; // Update bot x.
-}
-
-
-function draw_bot( ) // Convert bot pox to grid pos & draw bot.
-{
-    check();  //check the cell if it needs to be filled in black or white
-    let sz = g_canvas.cell_size;
-    let x = g_bot.x*sz; // Set x one pixel inside the sz-by-sz cell.
-    let y = g_bot.y*sz;
-    rect(x, y, sz, sz );
-}
-
-//moves the bot to the next row
-function next_row()
-{
-  if(g_bot.y <= g_canvas.hgt)
-    g_bot.y+=1;
-  else noLoop()
-}
-
-function draw_update()  // Update our display.
-{
-    // if the bot reaches the end move to the next row
-  if(g_bot.x / g_canvas.wid == 1)
-  {
-    next_row();
+    noStroke();
+    fill('black')
+    text(`${array[arrayIndex]}`, x_position + 5, y_position + 17)
+    x_position += g_canvas.cell_size;
   }
-  draw_bot( );
-  move_bot( );
+  quickSortRow += 1;
+}
+
+
+// Does one step at a time for each algorithm until they are all done.
+function race_manager(testingArray) {
+  // QuickSort
+  quickSortHelper(testingArray);
+  let delayIndex = 0
+  while (quickSortStep() != 0) {
+    let step = quickSortStep();
+    setTimeout(() => {
+      updateQuickSort(step);
+    },2000 * delayIndex)
+    delayIndex += 1;
+    quickSortBag['currentIndex'] += 1;
+  }
+
+  // Pore Sort
+  let poreObj = {input:{}, swapped:true, n:0};
+  poreObj.input = testingArray;
+  console.log(poreSortStep(poreObj));
+
 }
 
 function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
 {
-    draw_update();
+  noLoop();
+  let testIndex = Math.floor((Math.random() * 24))
+  race_manager(testingInput[testIndex])
+    // draw_update();
 }

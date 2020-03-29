@@ -201,9 +201,9 @@ let callerStack = [];
 let sortingStack = [];
 let counter = 0;
 getQuickSortStepHelper(testString);
-//sortingStack[sortingStack.length - 1]['doneStatus'] == false
-while (callerStack.length != 0) {
 
+while (callerStack[callerStack.length - 1]['doneStatus'] == false) {
+  console.log(callerStack.length)
   getQuickSortStep()
   console.log(callerStack[callerStack.length - 1]['array'])
 
