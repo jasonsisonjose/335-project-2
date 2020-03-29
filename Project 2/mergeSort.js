@@ -45,24 +45,38 @@ function mergeStep(mergeObj)
     if(ar.length < 2)
     {
       mergeStack.pop();
-      mergeStack[mergeStack.length - 1].p = 1;
+      mergeStack[mergeStack.length - 1].p += 1;
       return ar;
     }
 
     mergeHelp(obj.left);
     console.log(obj.ar);
-    var larr = mergeStep(mergeStack[mergeStack.length - 1]);
+    mergeStep(mergeStack[mergeStack.length - 1]);
   }
   else if(obj.p == 1)
   {
     mergeHelp(obj.right);
-    var rarr = mergeStep(mergeStack[mergeStack.length -1]);
+    mergeStep(mergeStack[mergeStack.length -1]);
   }
   else
   {
     mergeStack.pop();
-    mergeStack[mergeStack.length - 1].p = 
-    return merge(obj.left, obj.right);
+    if(mergeStack.length != 0)
+    {
+      mergeStack[mergeStack.length - 1].p += 1;
+      if(mergeStack[mergeStack.length - 1].p == 2)
+      {
+        mergeStack[mergeStack.length - 1].right = merge(obj.left,obj.right);
+      }
+      else
+      {
+        mergeStack[mergeStack.length - 1].left = merge(obj.left, obj.right);
+      }
+    }
+    else
+    {
+      return merge(obj.left, obj.right);
+    }
   }
 }
 
