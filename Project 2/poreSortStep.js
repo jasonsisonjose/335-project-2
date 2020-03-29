@@ -16,7 +16,6 @@ function swap (items, left, right)
 
 function poreSortStep(pObj)
 {
-  console.log(pObj.input);
   if(pObj.swapped)
   {
     pObj.swapped = false;
@@ -25,18 +24,16 @@ function poreSortStep(pObj)
     {
       let left = i,
           right = i + 1;
-      if(pObj.input[i] > pObj.input[i + 1])
+      if(numberCheck(pObj.input[i]) > numberCheck(pObj.input[i + 1]))
       {
         swap(pObj.input, left, right);
         pObj.swapped = true;
-
+        //console.log(poreObj.input);
       }
-      console.log(pObj.input)
     }
     psSetup(pObj.input);
     pObj.n++;
   }
-  console.log(pObj.input);
   return pObj;
 }
 
